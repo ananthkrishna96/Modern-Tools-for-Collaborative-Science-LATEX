@@ -1,0 +1,29 @@
+name: Build LaTeX
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the workflow on
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-docker@v1
+
+    - name: Build LaTeX
+      run: docker build -t akdkrlatex .
+
+    - name: Generate PDF
+      run: docker run --rm -v "$(pwd)":/app akdkrlatex pdflatex main.tex
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: main.pdf
+        path: main.pdf
