@@ -1,20 +1,17 @@
-# Use a Debian or Ubuntu base image
+# base image
 FROM debian:latest
-# FROM ubuntu:latest
 
-# Update the system and install necessary packages
+# packages
 RUN apt-get update \
     && apt-get install -y texlive texlive-latex-extra texlive-fonts-recommended
 
-# Set the working directory to /app
+# working dir
 WORKDIR /app
-
-# Copy the TeX repository into the container
 COPY . /app
 
-# Generate the PDF
+# PDF
 RUN pdflatex main.tex
 
-# Specify the command to run when the container starts
+# command to run when starts
 CMD ["pdflatex", "main.tex"]
 
