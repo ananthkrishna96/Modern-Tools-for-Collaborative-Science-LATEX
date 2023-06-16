@@ -22,13 +22,20 @@ jobs:
         run: docker pull ananthkrishna96/akdkrlatex:latest
 
       - name: Generate PDF
-        run: docker run --rm -v "$(pwd)":/app ananthkrishna96/akdkrlatex:latest pdflatex main.tex
+        run: docker run --rm ananthkrishna96/akdkrlatex:latest ls
 
-      - name: Commit and push changes
+      - name: Move PDF
         run: |
-          git config user.name "ananthkrishna96"
-          git config user.email "ananthakrishnanom@gmail.com"
-          git add main.pdf
-          git commit -m "Add generated PDF"
-          git push
+          mkdir -p pdf_output
+          mv main.pdf pdf_output/
 
+      - name: Configure Git
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Commit and Push changes
+        run: |
+          git add pdf_output/main.pdf
+          git commit -m "Update main.pdf"
+          git push
