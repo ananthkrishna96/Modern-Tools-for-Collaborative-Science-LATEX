@@ -39,3 +39,10 @@ jobs:
           git add pdf_output/main.pdf
           git commit -m "Update main.pdf"
           git push
+      - name: Commit and Push changes
+        run: |
+          git add pdf_output/main.pdf
+          git commit -m "Update main.pdf"
+          git push origin master
+        env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
