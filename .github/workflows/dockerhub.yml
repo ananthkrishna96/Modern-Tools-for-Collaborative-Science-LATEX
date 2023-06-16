@@ -1,0 +1,34 @@
+name: Build and Push LaTeX PDF
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build LaTeX (Pull from Docker Hub)
+        run: docker pull ananthkrishna96/akdkrlatex:latest
+
+      - name: Generate PDF
+        run: docker run --rm -v "$(pwd)":/app ananthkrishna96/akdkrlatex:latest pdflatex main.tex
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "ananthkrishna96"
+          git config user.email "ananthakrishnanom@gmail.com"
+          git add main.pdf
+          git commit -m "Add generated PDF"
+          git push
+
